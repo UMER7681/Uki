@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#071014">
+  <title>UKI — Your Personal AI</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">U</div>
+        <div>
+          <div class="brand-name">UKI</div>
+          <div class="brand-sub">Your Personal AI</div>
+        </div>
+      </div>
+
+      <nav>
+        <button class="nav-btn active" data-view="chat">◈ <span>Chat</span></button>
+        <button class="nav-btn" data-view="today">▣ <span>Today</span></button>
+        <button class="nav-btn" data-view="calendar">□ <span>Calendar</span></button>
+        <button class="nav-btn" data-view="tasks">✓ <span>Tasks</span></button>
+        <button class="nav-btn" data-view="notes">▤ <span>Notes</span></button>
+        <button class="nav-btn" data-view="files">⌁ <span>Files</span></button>
+        <button class="nav-btn" data-view="memory">♧ <span>Memory</span></button>
+        <button class="nav-btn" data-view="search">⌕ <span>Web Search</span></button>
+        <button class="nav-btn" data-view="settings">⚙ <span>Settings</span></button>
+      </nav>
+
+      <div class="profile">
+        <div class="avatar">U</div>
+        <div><strong id="profileName">Umer</strong><small>uki.v1</small></div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="greeting">
+          <div class="sun">☼</div>
+          <div>
+            <h1 id="greetingTitle">Good morning, <span id="nameTitle">Umer</span>.</h1>
+            <p>What can I help you with?</p>
+          </div>
+        </div>
+        <div class="status"><i></i> UKI is online <span class="wave">◉</span></div>
+      </header>
+
+      <section id="view-chat" class="view active">
+        <div id="chat" class="chat"></div>
+        <div class="composer">
+          <button id="voiceBtn" class="icon-btn" title="Voice">🎙</button>
+          <input id="messageInput" autocomplete="off" placeholder="Ask UKI anything...">
+          <button id="sendBtn" class="send-btn">➤</button>
+        </div>
+        <div class="hint">Try: “remember my exam is Friday” · “add task revise physics” · “what time is it?”</div>
+      </section>
+
+      <section id="view-today" class="view">
+        <div class="page-title"><h2>Today</h2><p id="todayDate"></p></div>
+        <div class="cards" id="todayCards"></div>
+      </section>
+
+      <section id="view-calendar" class="view">
+        <div class="page-title"><h2>Calendar</h2><p>V1 stores events locally on this device.</p></div>
+        <div class="panel">
+          <div class="row"><input id="eventText" placeholder="Event name"><input id="eventTime" type="datetime-local"><button class="primary" id="addEvent">Add</button></div>
+          <div id="eventsList"></div>
+        </div>
+      </section>
+
+      <section id="view-tasks" class="view">
+        <div class="page-title"><h2>Tasks</h2><p>Simple local task manager.</p></div>
+        <div class="panel">
+          <div class="row"><input id="taskText" placeholder="New task"><button class="primary" id="addTask">Add task</button></div>
+          <div id="tasksList"></div>
+        </div>
+      </section>
+
+      <section id="view-notes" class="view">
+        <div class="page-title"><h2>Notes</h2><p>Notes stay in this browser.</p></div>
+        <div class="panel">
+          <div class="row"><input id="noteTitle" placeholder="Title"><button class="primary" id="saveNote">Save note</button></div>
+          <textarea id="noteBody" placeholder="Write a note..."></textarea>
+          <div id="notesList"></div>
+        </div>
+      </section>
+
+      <section id="view-files" class="view">
+        <div class="page-title"><h2>Files</h2><p>Browser V1 cannot read your private device folders automatically.</p></div>
+        <div class="panel explanation">
+          <h3>Safe by default</h3>
+          <p>For V1, UKI only sees information you enter or import here. A later backend can connect to selected folders without exposing them to the public internet.</p>
+          <label class="file-drop">Import a text/markdown file
+            <input id="fileInput" type="file" accept=".txt,.md,.json,.csv">
+          </label>
+          <pre id="filePreview">No file imported.</pre>
+        </div>
+      </section>
+
+      <section id="view-memory" class="view">
+        <div class="page-title"><h2>Memory</h2><p>UKI only saves memories when you ask.</p></div>
+        <div class="panel">
+          <div class="row"><input id="memoryText" placeholder="Something UKI should remember"><button class="primary" id="saveMemory">Remember</button></div>
+          <div id="memoryList"></div>
+        </div>
+      </section>
+
+      <section id="view-search" class="view">
+        <div class="page-title"><h2>Web Search</h2><p>V1 opens your search in a new browser tab.</p></div>
+        <div class="panel">
+          <div class="row"><input id="searchText" placeholder="Search the web"><button class="primary" id="webSearch">Search</button></div>
+          <p class="muted">UKI does not pretend to have read a result unless a future backend actually retrieves it.</p>
+        </div>
+      </section>
+
+      <section id="view-settings" class="view">
+        <div class="page-title"><h2>Settings</h2><p>Personalize UKI.</p></div>
+        <div class="panel settings">
+          <label>Your name <input id="settingsName" placeholder="Your name"></label>
+          <label>UKI voice <select id="voiceSelect"><option value="auto">Auto</option></select></label>
+          <button class="primary" id="saveSettings">Save settings</button>
+          <button class="danger" id="resetData">Reset local UKI data</button>
+        </div>
+      </section>
+    </main>
+
+    <aside class="rightbar">
+      <div class="overview panel">
+        <h3>Today Overview</h3>
+        <div class="stat"><b id="eventCount">0</b><span>Events</span></div>
+        <div class="stat"><b id="taskCount">0</b><span>Tasks</span></div>
+        <div class="stat"><b id="memoryCount">0</b><span>Memories</span></div>
+      </div>
+      <div class="panel">
+        <h3>Next Event</h3>
+        <div id="nextEvent" class="next-event">Nothing scheduled.</div>
+      </div>
+      <div class="panel">
+        <h3>Tasks</h3>
+        <div id="sideTasks"></div>
+      </div>
+      <div class="panel quick">
+        <h3>Quick Actions</h3>
+        <div class="quick-grid">
+          <button id="quickVoice">🎙<small>Voice</small></button>
+          <button id="quickTask">＋<small>Add Task</small></button>
+          <button id="quickNote">▤<small>New Note</small></button>
+          <button id="quickSearch">⌕<small>Search</small></button>
+        </div>
+      </div>
+    </aside>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
