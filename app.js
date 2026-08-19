@@ -54,11 +54,34 @@ function agent(input){
  if(l.includes("help")||l.includes("what can you do")) return "I can chat, remember facts, manage local tasks and events, save notes, tell the time, and open web searches. More integrations come in V2.";
  return "I can handle that in a later version. For V1, try asking me to remember something, add a task, check your tasks, tell the time, or search the web.";
 }
-function send(){
- const input=$("#messageInput"), text=input.value.trim(); if(!text)return;
- addMessage("me",text); input.value="";
- const result=agent(text); if(result)reply(result);
+async function send(){
+ const input=$("#messageInput"), text=input.value.trim();
+ if(!text)return;
+
+ addMessage("me",text);
+ input.value="";
+
+ try {
+   const response=await fetch("/api/chat",{
+     method:"POST",
+     headers:{"Content-Type":"application/json"},
+     body:JSON.stringify({message:text})
+   });
+
+   const data=await response.json();
+
+   if(!response.ok){
+     reply(data.error||"Sorry, something went wrong.");
+     return;
+   }
+
+   reply(data.text||"I couldn't generate a response.");
+ } catch(error) {
+   console.error(error);
+   reply("I couldn't connect to my AI service.");
+ }
 }
+
 $("#sendBtn").onclick=send; $("#messageInput").addEventListener("keydown",e=>{if(e.key==="Enter")send()});
 $("#addTask").onclick=()=>{const x=$("#taskText");addTask(x.value);x.value=""};
 $("#addEvent").onclick=()=>{if(!$("#eventText").value||!$("#eventTime").value)return;state.events.push({text:$("#eventText").value,time:$("#eventTime").value});$("#eventText").value="";$("#eventTime").value="";save()};
